@@ -1,4 +1,3 @@
--- Crear base de datos
 CREATE DATABASE IF NOT EXISTS estudiomusical;
 USE estudiomusical;
 
@@ -65,5 +64,3 @@ CREATE TABLE Contratos (
     FOREIGN KEY (id_artista) REFERENCES Artistas(id_artista),
     FOREIGN KEY (id_productor) REFERENCES Productores(id_productor)
 );
-
-SELECT * FROM Sesiones

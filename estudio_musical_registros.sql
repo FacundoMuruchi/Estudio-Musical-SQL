@@ -31,6 +31,9 @@ INSERT INTO Productores (nombre, experiencia) VALUES
 ('Tiny', 8),
 ('Pharrell Williams', 20);
 
+INSERT INTO Productores (nombre, experiencia) VALUES
+('FM', 7);
+
 -- Estudios
 INSERT INTO Estudios (nombre, ubicacion) VALUES
 ('Estudio A', 'Buenos Aires'),
@@ -46,6 +49,9 @@ INSERT INTO Albumes (titulo, año_lanzamiento, id_artista) VALUES
 ('Future Nostalgia', 2020, 5),
 ('After Hours', 2020, 6);
 
+INSERT INTO Albumes (titulo, año_lanzamiento, id_artista) VALUES
+('She Dont Give a Fo', 2017, 17);
+
 -- Canciones
 INSERT INTO Canciones (titulo, duracion, id_album) VALUES
 ('Despacito', '00:03:47', 1),
@@ -54,6 +60,9 @@ INSERT INTO Canciones (titulo, duracion, id_album) VALUES
 ('Saoko', '00:03:10', 4),
 ('Levitating', '00:03:23', 5),
 ('Blinding Lights', '00:03:20', 6);
+
+INSERT INTO Canciones (titulo, duracion, id_album) VALUES
+('She Dont Give a Fo', '00:03:50', 7);
 
 -- Sesiones
 INSERT INTO Sesiones (fecha, id_estudio, id_cancion, id_productor) VALUES
@@ -71,6 +80,9 @@ INSERT INTO Contratos (id_artista, id_productor, fecha_inicio, fecha_fin, monto_
 (3, 3, '2022-06-10', '2023-06-10', 45000.00),
 (4, 4, '2023-07-20', '2024-07-20', 70000.00),
 (5, 5, '2023-09-01', '2024-09-01', 80000.00);
+
+INSERT INTO Contratos (id_artista, id_productor, fecha_inicio, fecha_fin, monto_total) VALUES
+(17, 6, '2025-01-01', '2027-01-01', 40400.00);
 
 -- Actualizar productores
 SET SQL_SAFE_UPDATES = 0;
