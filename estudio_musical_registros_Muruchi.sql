@@ -109,3 +109,24 @@ SET monto_total = CASE monto_total
     ELSE monto_total
 END;
 SET SQL_SAFE_UPDATES = 1;
+
+
+
+-- Inserción de sesiones de prueba
+CALL registrar_sesion('2024-05-01', 1, 1, 1);
+CALL registrar_sesion('2024-05-02', 2, 2, 2);
+
+-- Prueba de trigger: debe insertar logs automáticamente
+SELECT * FROM Sesion_Log;
+
+-- Prueba de función obtener_antiguedad_productor
+SELECT obtener_antiguedad_productor(1);
+
+-- Prueba de función canciones_por_album
+SELECT canciones_por_album(1);
+
+-- Prueba de vista de contratos activos
+SELECT * FROM vista_contratos_activos;
+
+-- Prueba de SP actualizar contrato
+CALL actualizar_monto_contrato(1, 99999.99);
