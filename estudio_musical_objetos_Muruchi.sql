@@ -5,7 +5,7 @@ USE estudiomusical;
 CREATE TABLE Artistas (
     id_artista INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    nacionalidad VARCHAR(50),
+    nacionalidad VARCHAR(100),
     fecha_nacimiento DATE
 );
 
@@ -73,7 +73,65 @@ CREATE TABLE IF NOT EXISTS Sesion_Log (
   FOREIGN KEY (id_sesion) REFERENCES Sesiones(id_sesion)
 );
 
+-- Tabla: Generos
+CREATE TABLE Generos (
+    id_genero INT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
+);
 
+-- Tbla: Cancion_Genero N:M
+CREATE TABLE Cancion_Genero (
+    id_cancion INT,
+    id_genero INT,
+    PRIMARY KEY (id_cancion, id_genero),
+    FOREIGN KEY (id_cancion) REFERENCES Canciones(id_cancion),
+    FOREIGN KEY (id_genero) REFERENCES Generos(id_genero)
+);
+
+-- Tabla: Instrumentos
+CREATE TABLE Instrumentos (
+    id_instrumento INT PRIMARY KEY,
+    nombre VARCHAR(50),
+    tipo VARCHAR(50)
+);
+
+-- Tabla: Sesion_Instrumento
+CREATE TABLE Sesion_Instrumento (
+    id_sesion INT,
+    id_instrumento INT,
+    PRIMARY KEY (id_sesion, id_instrumento),
+    FOREIGN KEY (id_sesion) REFERENCES Sesiones(id_sesion),
+    FOREIGN KEY (id_instrumento) REFERENCES Instrumentos(id_instrumento)
+);
+
+-- Tabla: Colaboraciones
+CREATE TABLE Colaboraciones (
+    id_cancion INT,
+    id_artista INT,
+    rol VARCHAR(50), -- Ej: 'vocalista', 'compositor'
+    PRIMARY KEY (id_cancion, id_artista),
+    FOREIGN KEY (id_cancion) REFERENCES Canciones(id_cancion),
+    FOREIGN KEY (id_artista) REFERENCES Artistas(id_artista)
+);
+
+-- Tabla: Pagos
+CREATE TABLE Pagos (
+    id_pago INT PRIMARY KEY,
+    id_contrato INT,
+    fecha_pago DATE,
+    monto DECIMAL(10, 2),
+    FOREIGN KEY (id_contrato) REFERENCES Contratos(id_contrato)
+);
+
+-- Tabla: Hechos_Produccion
+CREATE TABLE Hechos_Produccion (
+    id_hecho INT PRIMARY KEY,
+    id_sesion INT,
+    duracion_cancion TIME,
+    monto_contrato DECIMAL(10,2),
+    cantidad_instrumentos INT,
+    FOREIGN KEY (id_sesion) REFERENCES Sesiones(id_sesion)
+);
 
 
 -- Vistas
@@ -95,6 +153,28 @@ CREATE OR REPLACE VIEW vista_artistas_albumes AS
 SELECT a.nombre AS artista, al.titulo AS album
 FROM Artistas a
 JOIN Albumes al ON a.id_artista = al.id_artista;
+
+CREATE VIEW vista_duracion_albumes AS
+SELECT 
+    al.titulo AS titulo_album,
+    a.nombre AS nombre_artista,
+    SEC_TO_TIME(SUM(TIME_TO_SEC(c.duracion))) AS duracion_total
+FROM Albumes al
+JOIN Canciones c ON al.id_album = c.id_album
+JOIN Artistas a ON al.id_artista = a.id_artista
+GROUP BY al.id_album, al.titulo, a.nombre;
+
+CREATE VIEW vista_top_colaboraciones AS
+SELECT 
+    a.nombre AS nombre_artista,
+    p.nombre AS nombre_productor,
+    COUNT(*) AS cantidad_colaboraciones
+FROM Contratos c
+JOIN Artistas a ON c.id_artista = a.id_artista
+JOIN Productores p ON c.id_productor = p.id_productor
+GROUP BY a.nombre, p.nombre
+ORDER BY cantidad_colaboraciones DESC;
+
 
 -- Funciones
 DELIMITER //
